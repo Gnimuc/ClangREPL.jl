@@ -1,0 +1,13 @@
+name = "ClangREPL"
+uuid = "7caf82eb-402f-4bd2-a1ea-c276d6a5ea56"
+authors = ["Yupei Qi <qiyupei@gmail.com>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
