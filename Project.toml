@@ -1,0 +1,17 @@
+name = "ClangREPL"
+uuid = "7caf82eb-402f-4bd2-a1ea-c276d6a5ea56"
+version = "0.1.0"
+authors = ["Yupei Qi <qiyupei@gmail.com>"]
+
+[deps]
+CppInterOp = "13f4c181-cae7-41d1-84d4-2ea5f5fafb15"
+
+[compat]
+CppInterOp = "~0.1"
+julia = "1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
