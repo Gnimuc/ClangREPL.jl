@@ -1,6 +1,7 @@
 using ClangREPL
 using Test
 
-@testset "ClangREPL.jl" begin
-    # Write your tests here.
+@testset "ClangREPL" begin
+    itpr = get_current_interpreter()
+    @test itpr.ptr != C_NULL
 end
