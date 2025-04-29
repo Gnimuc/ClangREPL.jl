@@ -7,7 +7,8 @@ import REPL: LineEdit
 
 function evaluate(repl::REPL.AbstractREPL, input::String)
     try
-        CppInterOp.Process(input)
+        I = INSTANCES[INSTANCE_ID[]]
+        setglobal!(Base.MainInclude, :ans, CppInterOp.evaluate(I, input))
     catch err
         Base.display_error(repl.t.err_stream, err, Base.catch_backtrace())
     end
@@ -75,33 +76,40 @@ function repl_init(repl::REPL.AbstractREPL)
     return nothing
 end
 
-function __init__()
-    if create_interpreter().ptr == C_NULL
-        error("CppInterOp: failed to create interpreter.")
-    end
+const INSTANCE_ID = Threads.Atomic{Int}(0)
+const INSTANCES = Dict{Int,CppInterOp.Interpreter}()
 
-    CppInterOp.EnableDebugOutput()
+function __init__()
+    I = CppInterOp.create_interpreter()
+    I.ptr == C_NULL && error("CppInterOp: failed to create interpreter.")
+    Threads.atomic_add!(INSTANCE_ID, 1)
+    INSTANCES[INSTANCE_ID[]] = I
 
     # for embedding Julia
-    setup_julia_env()
+    setup_julia_env(I)
 
     if isdefined(Base, :active_repl)
         repl_init(Base.active_repl)
     end
+
+    atexit() do
+        for (_, I) in INSTANCES
+            CppInterOp.dispose(I)
+        end
+    end
 end
 
-get_current_interpreter() = CppInterOp.GetInterpreter()
-export get_current_interpreter
-
-function setup_julia_env()
+function setup_julia_env(I)
     julia_include_dir = normpath(joinpath(Sys.BINDIR, "..", "include", "julia"))
-    CppInterOp.AddIncludePath(julia_include_dir)
+    CppInterOp.addIncludePath(I, julia_include_dir)
 end
 
-function reset()
-    create_interpreter()
-    setup_julia_env()
+function create()
+    I = CppInterOp.create_interpreter()
+    id = Threads.atomic_add!(INSTANCE_ID, 1)
+    INSTANCES[id] = I
+    setup_julia_env(I)
 end
-export reset
+export create
 
 end
