@@ -112,4 +112,10 @@ function create()
 end
 export create
 
+function add_include_dir(x::AbstractString)
+    I = INSTANCES[INSTANCE_ID[]]
+    CppInterOp.addIncludePath(I, normpath(x))
+end
+export add_include_dir
+
 end
