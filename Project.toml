@@ -4,13 +4,16 @@ version = "0.1.0"
 authors = ["Yupei Qi <qiyupei@gmail.com>"]
 
 [deps]
-CppInterOp = "13f4c181-cae7-41d1-84d4-2ea5f5fafb15"
+ClangCompiler = "06fc9500-c033-43bc-8ca2-e20da63309d9"
 REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
+[sources]
+ClangCompiler = {path = "../ClangCompiler"}
+
 [compat]
-CppInterOp = "~0.1"
+ClangCompiler = "0.1"
 REPL = "1.11.0"
-julia = "1.12"
+julia = "1.13"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
